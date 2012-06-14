@@ -12,8 +12,8 @@
   </head> 
 <body> 
 
-  <!-- Start of first page -->
-  <div data-role="page" id="foo">
+  <!-- Start of My Friends page -->
+  <div data-role="page" id="my-friends">
 
     <div data-role="header">
       <h1>My Friends</h1>
@@ -21,7 +21,7 @@
 
     <div data-role="content">	
         <p>I'm first in the source order so I'm shown as the page.</p>		
-        <p>View internal page called <a href="#bar">bar</a></p>	
+        <p>View internal page called <a href="#login">login</a></p>	
     </div><!-- /content -->
 
     <div data-role="footer">
@@ -31,15 +31,15 @@
 
 
   <!-- Start of second page -->
-  <div data-role="page" id="bar">
+  <div data-role="page" id="login">
 
       <div data-role="header">
-          <h1>Bar</h1>
+          <h1>Login</h1>
       </div><!-- /header -->
 
       <div data-role="content">	
           <p>I'm the second in the source order so I'm hidden when the page loads. I'm just shown if a link that references my id is beeing clicked.</p>		
-          <p><a href="#foo">Back to foo</a></p>	
+          <p><a href="#my-friends">Back to friends</a></p>	
       </div><!-- /content -->
 
       <div data-role="footer">
