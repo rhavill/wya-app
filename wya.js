@@ -21,11 +21,16 @@ var vu = $.mobile.path.parseUrl( data.toPage );
 
 //$( '#my-friends' ).live( 'pageinit',function(event,data){
 $(document).bind( 'pageinit',function(event,data){
-  alert( 'This page was just bind enhanced by jQuery Mobile!' );
+  alert( 'page init was called' );
+  $("#msg").css("border","3px solid red");  
 });
 $( document ).bind( "pagebeforeload", function( event, data ){
   alert( 'pagebeforeload');
 });
 $( document ).bind( 'pagebeforecreate',function(event){
-  alert( 'This page was just inserted into the dom!' );
+  alert( 'pagebeforecreate was called' );
 });
+$( document ).bind( 'pagecreate',function(event){
+  alert( 'pagecreate was called' );
+});
+
