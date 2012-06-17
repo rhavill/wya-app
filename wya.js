@@ -1,6 +1,6 @@
 // Listen for any attempts to call changePage().
 $(document).bind( "pagebeforechange", function( e, data ) { 
-  if ( typeof data.toPage === "string" ) {
+  if (typeof data.toPage === "string") {
     var u = $.mobile.path.parseUrl( data.toPage );
     if (u.hash == '#my-friends') {
       loadFriends();
@@ -25,7 +25,6 @@ function listFriends(friends) {
 }
 
 function loadFriends() {
-  alert('geting friends..');
   callJSONP('http://wya/rest/user-relationships.jsonp?callback=listFriends');
 }
 
