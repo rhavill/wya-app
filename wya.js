@@ -19,9 +19,12 @@ $(document).ready(function () {
 });
 
 function listFriends(friends) {
-  $.each(friends, function(key, value) { 
-  alert(value.rid); 
-  });
+  if (friends.length) {
+    $('<ul id="friend-list" data-role="listview" data-theme="g"></ul>').appendTo('#my-friends .content');
+    $.each(friends, function(key, value) { 
+      $('<li><a href="' + value.id + '" ' + '</a>' + value.name + '</li>').appendTo('#friend-list');
+    });
+  }
 }
 
 function loadFriends() {
