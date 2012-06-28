@@ -20,10 +20,11 @@ $(document).ready(function () {
 
 function listFriends(friends) {
   if (friends.length) {
-    $('<ul id="friend-list" data-role="listview" data-theme="g"></ul>').appendTo('#my-friends .content');
+    $('#friend-list').empty();
     $.each(friends, function(key, value) { 
-      $('<li><a href="' + value.id + '" ' + '</a>' + value.name + '</li>').appendTo('#friend-list');
+      $('<li><a href="' + value.id + '">' + value.name + '</a></li>').appendTo('#friend-list');
     });
+    $("#friend-list").listview("refresh");
   }
 }
 
