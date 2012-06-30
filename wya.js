@@ -29,21 +29,21 @@ function listFriends(friends) {
 }
 
 function loadFriends() {
-  //callJSONP('http://wya/rest/user-relationships.jsonp?callback=listFriends');
-  //$.ajax({
-  //  type: "GET",
-  //  url: 'http://wya/rest/user-relationships.jsonp',
-  //  dataType: 'jsonp',
-  //  success: function(friends) {
-  //    listFriends(friends);
-  //  },
-  //  error: function(jqXHR, textStatus, errorThrown) {
-  //    alert(textStatus);
-  //  }
-  //});
+  //callJSONP('https://whereyouat.net/rest/user-relationships.jsonp?callback=listFriends');
+  $.ajax({
+    type: "GET",
+    url: 'https://whereyouat.net/rest/user-relationships.json',
+    dataType: 'json',
+    success: function(friends) {
+      listFriends(friends);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      alert(textStatus);
+    }
+  });
   
   //var req = $.ajax({
-  //  url : 'http://wya/rest/user-relationships.jsonp',
+  //  url : 'http://whereyouat.net/rest/user-relationships.jsonp',
   //  dataType : "jsonp",
   //  timeout : 10000000
   //});
@@ -57,7 +57,7 @@ function loadFriends() {
   //});
 /*
 $.jsonp({
-  url: 'http://wya/rest/user-relationships.jsonp',
+  url: 'http://whereyouat.net/rest/user-relationships.jsonp',
   data: {
     "lang" : "en-us",
     "format" : "json",
