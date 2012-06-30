@@ -29,7 +29,58 @@ function listFriends(friends) {
 }
 
 function loadFriends() {
-  callJSONP('http://wya/rest/user-relationships.jsonp?callback=listFriends');
+  //callJSONP('http://wya/rest/user-relationships.jsonp?callback=listFriends');
+  //$.ajax({
+  //  type: "GET",
+  //  url: 'http://wya/rest/user-relationships.jsonp',
+  //  dataType: 'jsonp',
+  //  success: function(friends) {
+  //    listFriends(friends);
+  //  },
+  //  error: function(jqXHR, textStatus, errorThrown) {
+  //    alert(textStatus);
+  //  }
+  //});
+  
+  //var req = $.ajax({
+  //  url : 'http://wya/rest/user-relationships.jsonp',
+  //  dataType : "jsonp",
+  //  timeout : 10000000
+  //});
+  //
+  //req.success(function() {
+  //  alert('Yes! Success!');
+  //});
+  //
+  //req.error(function(jqXHR, textStatus, errorThrown) {
+  //  alert('Oh noes!');
+  //});
+/*
+$.jsonp({
+  url: 'http://wya/rest/user-relationships.jsonp',
+  data: {
+    "lang" : "en-us",
+    "format" : "json",
+    "tags" : "sunset"
+  },
+  dataType: "jsonp",
+  callbackParameter: "listFriends",
+  timeout: 5000,
+  success: function(data, status){
+    //$.each(data.items, function(i,item){
+    //    $("<img>").attr("src", (item.media.m).replace("_m.","_s."))
+    //              .attr("alt", item.title)
+    //              .appendTo("ul#flickr")
+    //              .wrap("<li><a href=\"" + item.link + "\"></a></li>");
+    //    if (i == 9) return false;
+    //});
+  },
+  error: function(XHR, textStatus, errorThrown){
+      alert("ERREUR: " + textStatus);
+      alert("ERREUR: " + errorThrown);
+  }
+    });  
+*/
 }
 
 function callJSONP(url) {
