@@ -1,5 +1,4 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
-
 <html>
 <head>
   <title>WhereYouAt</title>
@@ -11,31 +10,23 @@
 </script>
   <script src="wya.js" type="text/javascript">
 </script>
-  <!--script src="jquery.jsonp-2.3.1.min.js" type="text/javascript"-->
-</script>
 </head>
 
 <body>
   <!-- Start of My Friends page -->
 
   <div data-role="page" id="my-friends">
-    <div id="msg">
-      <p>this is a test</p>
-    </div>
-
     <div data-role="header">
       <h1>My Friends</h1>
     </div><!-- /header -->
 
     <div class="content" data-role="content">
-      <p>View internal page called <a href="#login">login</a></p>
-
       <ul id="friend-list" data-role="listview"></ul>
     </div><!-- /content -->
 
-    <div data-role="footer">
+    <!--div data-role="footer">
       <h4>Page Footer</h4>
-    </div><!-- /footer -->
+    </div--><!-- /footer -->
   </div><!-- /page -->
   <!-- Start of second page -->
 
@@ -45,14 +36,24 @@
     </div><!-- /header -->
 
     <div data-role="content">
-      <p>I'm the second in the source order so I'm hidden when the page loads. I'm just shown if a link that references my id is beeing clicked.</p>
+      <form id="loginForm">
+        <div data-role="fieldcontain" class="ui-hide-label">
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username" value="" placeholder="Username" />
+        </div>
 
-      <p><a href="#my-friends">Back to friends</a></p>
+        <div data-role="fieldcontain" class="ui-hide-label">
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" value="" placeholder="Password" />
+        </div>
+
+        <input type="submit" value="Login" id="submitButton">
+      </form>
     </div><!-- /content -->
 
-    <div data-role="footer">
+    <!--div data-role="footer">
       <h4>Page Footer</h4>
-    </div><!-- /footer -->
+    </div--><!-- /footer -->
   </div><!-- /page -->
 </body>
 </html>
