@@ -16,6 +16,32 @@ $(document).ready(function () {
   if (location.hash == '' || location.hash == '#my-friends') {
     loadFriends();
   }
+  $("#loginForm").on("submit",function(e) {
+    //disable the button so we can't resubmit while we wait
+    $("#submitButton",this).attr("disabled","disabled");
+    var u = $("#username", this).val();
+    var p = $("#password", this).val();
+    if(u != '' && p!= '') {
+      $.ajax({
+        type: "POST",
+        url: 'https://whereyouat.net/rest/user/login.json',
+        dataType: 'json',
+        data: {
+          username: u,
+          password: p
+        },
+        success: function() {
+          $.mobile.changePage( "#my-friends");
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          var statusCode = jqXHR.statusCode().status;
+          alert('Houston, we have a problem trying to log in: ' + statusCode + ' ' + errorThrown);
+          $("#submitButton").removeAttr("disabled");
+        }
+      });
+    }
+    return false;
+  });
 });
 
 function listFriends(friends) {
@@ -39,7 +65,7 @@ function loadFriends() {
     error: function(jqXHR, textStatus, errorThrown) {
       var statusCode = jqXHR.statusCode().status;
       if (statusCode == 401) {
-        $.mobile.changePage( "#login"/*, { transition: "slideup"} */);
+        $.mobile.changePage("#login");
       }
       else {
         alert('Houston, we have a problem trying to list friends: ' + statusCode + ' ' + errorThrown);        
@@ -48,43 +74,6 @@ function loadFriends() {
   });
   
 }
-
-$("#loginForm").on("submit",function(e) {
-  //disable the button so we can't resubmit while we wait
-  $("#submitButton",this).attr("disabled","disabled");
-  var u = $("#username", this).val();
-  var p = $("#password", this).val();
-  if(u != '' && p!= '') {/*
-    $.post("https://whereyouat.net/rest/user-relationships/login.json", {username:u,password:p}, function(res) {
-      if(res == true) {
-        $.mobile.changePage("#my-friends");
-      } else {
-        navigator.notification.alert("Your login failed", function() {});
-      }
-      $("#submitButton").removeAttr("disabled");
-    },"json");*/
-    $.ajax({
-      type: "POST",
-      url: 'https://whereyouat.net/rest/user/login.json',
-      dataType: 'json',
-      success: function(friends) {
-        alert('login good.');
-        //listFriends(friends);
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        alert('login bad');
-        var statusCode = jqXHR.statusCode().status;
-        if (statusCode == 401) {
-          $.mobile.changePage( "#login"/*, { transition: "slideup"} */);
-        }
-        else {
-          alert('Houston, we have a problem trying to log in: ' + statusCode + ' ' + errorThrown);        
-        }
-      }
-    });
-  }
- return false;
-});
 
 function callJSONP(url) {
   if (url) {
