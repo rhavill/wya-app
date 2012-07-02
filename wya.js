@@ -1,7 +1,7 @@
 // Listen for any attempts to call changePage().
 $(document).bind( "pagebeforechange", function( e, data ) { 
   if (typeof data.toPage === "string") {
-    var u = $.mobile.path.parseUrl( data.toPage );
+    var u = $.mobile.path.parseUrl(data.toPage);
     if (u.hash == '#my-friends') {
       loadFriends();
     }
@@ -31,7 +31,7 @@ $(document).ready(function () {
           password: p
         },
         success: function() {
-          $.mobile.changePage( "#my-friends");
+          $.mobile.changePage("#my-friends");
         },
         error: function(jqXHR, textStatus, errorThrown) {
           var statusCode = jqXHR.statusCode().status;
@@ -41,6 +41,23 @@ $(document).ready(function () {
       });
     }
     return false;
+  });
+});
+
+$(document).bind("pageinit", function( e, data ) { 
+  $('.logout').click(function() {
+    $.ajax({
+      type: "POST",
+      url: 'https://whereyouat.net/rest/user/logout.json',
+      dataType: 'json',
+      success: function() {
+        $.mobile.changePage("#login");
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        var statusCode = jqXHR.statusCode().status;
+        alert('Houston, we have a problem trying to log out: ' + statusCode + ' ' + errorThrown);
+      }
+    });
   });
 });
 
