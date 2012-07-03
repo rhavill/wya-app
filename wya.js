@@ -18,7 +18,7 @@ $(document).ready(function () {
   }
   $("#loginForm").on("submit",function(e) {
     //disable the button so we can't resubmit while we wait
-    $("#submitButton",this).attr("disabled","disabled");
+    $("#loginSubmitButton",this).attr("disabled","disabled");
     var u = $("#username", this).val();
     var p = $("#password", this).val();
     if(u != '' && p != '') {
@@ -31,13 +31,13 @@ $(document).ready(function () {
           password: p
         },
         success: function() {
-          $("#submitButton").removeAttr("disabled");
+          $("#loginSubmitButton").removeAttr("disabled");
           $.mobile.changePage("#my-friends");
         },
         error: function(jqXHR, textStatus, errorThrown) {
           var statusCode = jqXHR.statusCode().status;
           alert('Houston, we have a problem trying to log in: ' + statusCode + ' ' + errorThrown);
-          $("#submitButton").removeAttr("disabled");
+          $("#loginSubmitButton").removeAttr("disabled");
         }
       });
     }
@@ -74,7 +74,7 @@ $(document).ready(function () {
           else {
             alert('Houston, we have a problem trying to register: ' + statusCode + ' ' + stripTags(errorThrown));
           }
-          e.preventDefault();
+          //e.preventDefault();
         }
       });
     }
