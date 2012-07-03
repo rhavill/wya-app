@@ -11,10 +11,9 @@
   <script src="wya.js" type="text/javascript">
 </script>
 </head>
-
 <body>
+  
   <!-- Start of My Friends page -->
-
   <div data-role="page" id="my-friends">
     <div data-role="header">
       <h1>My Friends</h1>
@@ -36,11 +35,17 @@
       <h4>Page Footer</h4>
     </div--><!-- /footer -->
   </div><!-- /page -->
-  <!-- Start of second page -->
+  <!-- Start of login page -->
 
   <div data-role="page" id="login">
     <div data-role="header">
       <h1>Login</h1>
+      <div data-role="navbar">
+        <ul>
+          <li><a href="#register" class="register">Create new account</a></li>
+          <li><a href="#password" class="requestPassword">Request new Password</a></li>
+        </ul>
+      </div><!-- /navbar -->
     </div><!-- /header -->
 
     <div data-role="content">
@@ -55,6 +60,12 @@
             <input type="password" name="password" id="password" value="" placeholder="Password" />
         </div>
 
+        <!--div class="item-list">
+          <ul>
+            <li><a href="#register" title="Create a new user account.">Create new account</a></li>
+            <li><a href="#password" title="Request new password via e-mail.">Request new password</a></li>
+          </ul>
+        </div-->
         <input type="submit" value="Login" id="submitButton">
       </form>
     </div><!-- /content -->
@@ -63,5 +74,36 @@
       <h4>Page Footer</h4>
     </div--><!-- /footer -->
   </div><!-- /page -->
+  
+  <div data-role="page" id="register">
+    <div data-role="header">
+      <h1>Register</h1>
+      <div data-role="navbar">
+        <ul>
+          <li><a href="#login" class="login">Login</a></li>
+          <li><a href="#password" class="requestPassword">Request new Password</a></li>
+        </ul>
+      </div><!-- /navbar -->
+    </div><!-- /header -->
+    <div data-role="content">
+      <form id="registerForm">
+        <div data-role="fieldcontain" class="ui-hide-label">
+            <label for="resgisterUsername">Code Name:</label>
+            <input type="text" name="username" id="resgisterUsername" value="" placeholder="Code name" />
+        </div>
+        <div class="description">Your code name will be visible to everyone. Spaces are allowed; punctuation is not allowed except for periods, hyphens, apostrophes, and underscores.</div>
+        <div data-role="fieldcontain" class="ui-hide-label">
+            <label for="email">E-mail address:</label>
+            <input type="text" name="email" id="registerEmail" value="" placeholder="E-mail address" />
+        </div>
+        <div class="description">A valid e-mail address. All e-mails from the system will be sent to this address. The e-mail address is not made public and will only be used if you wish to receive a new password or wish to receive certain news or notifications by e-mail.</div>
+        <input type="submit" value="Create new account" id="registerSubmit">
+      </form>
+    </div><!-- /content -->
+    <!--div data-role="footer">
+      <h4>Page Footer</h4>
+    </div--><!-- /footer -->
+  </div><!-- /page -->
+  
 </body>
 </html>

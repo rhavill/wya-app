@@ -21,7 +21,7 @@ $(document).ready(function () {
     $("#submitButton",this).attr("disabled","disabled");
     var u = $("#username", this).val();
     var p = $("#password", this).val();
-    if(u != '' && p!= '') {
+    if(u != '' && p != '') {
       $.ajax({
         type: "POST",
         url: 'https://whereyouat.net/rest/user/login.json',
@@ -42,6 +42,42 @@ $(document).ready(function () {
       });
     }
     return false;
+  });
+
+  $('#registerForm').on("submit",function(e) {
+    //disable the button so we can't resubmit while we wait
+    $("#registerSubmit",this).attr("disabled","disabled");
+    var resgisterUsername = $("#resgisterUsername", this).val();
+    var registerEmail = $("#registerEmail", this).val();
+    if(resgisterUsername != '' && registerEmail != '') {
+      $.ajax({
+        type: "POST",
+        url: 'https://whereyouat.net/rest/user/register.json',
+        dataType: 'json',
+        data: {
+          account: {
+            name: resgisterUsername,
+            mail: registerEmail
+          }
+        },
+        success: function() {
+          $("#registerSubmit").removeAttr("disabled");
+          $.mobile.changePage("#login");
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          var statusCode = jqXHR.statusCode().status;
+          $("#registerSubmit").removeAttr("disabled");
+          //if (statusCode == 406) {
+          if (false) {
+            $.mobile.changePage("#login");
+          }
+          else {
+            alert('Houston, we have a problem trying to register: ' + statusCode + ' ' + stripTags(errorThrown));
+          }
+          e.preventDefault();
+        }
+      });
+    }
   });
 });
 
@@ -96,6 +132,13 @@ function loadFriends() {
     }
   });
   
+}
+
+function stripTags(html)
+{
+   var tmp = document.createElement("DIV");
+   tmp.innerHTML = html;
+   return tmp.textContent||tmp.innerText;
 }
 
 function callJSONP(url) {
