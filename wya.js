@@ -31,6 +31,7 @@ $(document).ready(function () {
           password: p
         },
         success: function() {
+          $("#submitButton").removeAttr("disabled");
           $.mobile.changePage("#my-friends");
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -55,7 +56,12 @@ $(document).bind("pageinit", function( e, data ) {
       },
       error: function(jqXHR, textStatus, errorThrown) {
         var statusCode = jqXHR.statusCode().status;
-        alert('Houston, we have a problem trying to log out: ' + statusCode + ' ' + errorThrown);
+        if (statusCode == 406) {
+          $.mobile.changePage("#login");
+        }
+        else {
+          alert('Houston, we have a problem trying to log out: ' + statusCode + ' ' + errorThrown);
+        }
       }
     });
   });
