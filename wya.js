@@ -62,25 +62,47 @@ $(document).ready(function () {
         },
         success: function() {
           $("#registerSubmit").removeAttr("disabled");
+          alert('Contratulations, you have registered. Please check your email for more information.');
           $.mobile.changePage("#login");
         },
         error: function(jqXHR, textStatus, errorThrown) {
           var statusCode = jqXHR.statusCode().status;
           $("#registerSubmit").removeAttr("disabled");
-          //if (statusCode == 406) {
-          if (false) {
-            $.mobile.changePage("#login");
-          }
-          else {
-            alert('Houston, we have a problem trying to register: ' + statusCode + ' ' + stripTags(errorThrown));
-          }
-          //e.preventDefault();
+          alert('Houston, we have a problem trying to register: ' + statusCode + ' ' + stripTags(errorThrown));
         }
       });
     }
     //e.preventDefault();
     return false;
   });
+
+  $('#passwordForm').on("submit",function(e) {
+    //disable the button so we can't resubmit while we wait
+    $("#passwordSubmit",this).attr("disabled","disabled");
+    var name = $("#passwordRequestName", this).val();
+    if(name != '') {
+      $.ajax({
+        type: "POST",
+        url: 'https://whereyouat.net/rest/user-relationships/password.json',
+        dataType: 'json',
+        data: {
+          name: name
+        },
+        success: function() {
+          $("#passwordSubmit").removeAttr("disabled");
+          alert('Please check your email for instructions to help you set your password.');
+          $.mobile.changePage("#login");
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          var statusCode = jqXHR.statusCode().status;
+          $("#registerSubmit").removeAttr("disabled");
+          alert('Houston, we have a problem with the password request: ' + statusCode + ' ' + stripTags(errorThrown));
+        }
+      });
+    }
+    return false;
+  });
+
 });
 
 $(document).bind("pageinit", function( e, data ) { 
