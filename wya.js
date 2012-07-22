@@ -5,8 +5,10 @@ $(document).bind( "pagebeforechange", function( e, data ) {
     if (u.hash == '#my-friends') {
       loadFriends();
     }
-    else if (u.hash == '#login') {
-      //alert('login page')
+    else if (u.hash == '#my-phone') {
+      //displayPhoneLocation();
+      alert('find phone');
+      navigator.geolocation.getCurrentPosition(onSuccess, onError);
     }
     //e.preventDefault();
   }
@@ -171,4 +173,40 @@ function callJSONP(url) {
     script.src = url;
     document.body.appendChild(script); 
   }
+}
+
+ // Wait for Cordova to load
+    //
+    //document.addEventListener("deviceready", onDeviceReady, false);
+
+    // Cordova is ready
+    //
+    function onDeviceReady() {
+        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    }
+
+    // onSuccess Geolocation
+    //
+    function onSuccess(position) {
+        var element = document.getElementById('geolocation');
+        element.innerHTML = 'Latitude: '           + position.coords.latitude              + '<br />' +
+                            'Longitude: '          + position.coords.longitude             + '<br />' +
+                            'Altitude: '           + position.coords.altitude              + '<br />' +
+                            'Accuracy: '           + position.coords.accuracy              + '<br />' +
+                            'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + '<br />' +
+                            'Heading: '            + position.coords.heading               + '<br />' +
+                            'Speed: '              + position.coords.speed                 + '<br />' +
+                            'Timestamp: '          + position.timestamp                    + '<br />';
+    }
+
+    // onError Callback receives a PositionError object
+    //
+    function onError(error) {
+        alert('code: '    + error.code    + '\n' +
+              'message: ' + error.message + '\n');
+    }
+
+                            
+function displayPhoneLocation() {
+  
 }
