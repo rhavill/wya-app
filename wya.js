@@ -1,3 +1,4 @@
+
 // Listen for any attempts to call changePage().
 $(document).bind( "pagebeforechange", function( e, data ) { 
   if (typeof data.toPage === "string") {
@@ -8,13 +9,18 @@ $(document).bind( "pagebeforechange", function( e, data ) {
     else if (u.hash == '#my-phone') {
       //displayPhoneLocation();
       alert('find phone');
-      navigator.geolocation.getCurrentPosition(onSuccess, onError);
     }
     //e.preventDefault();
   }
 });
 
 $(document).ready(function () {
+  //navigator.geolocation.getCurrentPosition(onSuccess, onError);
+  // Throw an error if no update is received every 50 minutes // 30 seconds
+  //var options = { timeout: 3000000 };
+  var options = { timeout: 30000 };
+  watchID = navigator.geolocation.watchPosition(watchPositionSuccess, watchPositionError, options);      
+
   if (location.hash == '' || location.hash == '#my-friends') {
     loadFriends();
   }
@@ -105,9 +111,6 @@ $(document).ready(function () {
     return false;
   });
 
-});
-
-$(document).bind("pageinit", function( e, data ) { 
   $('.logout').click(function() {
     $.ajax({
       type: "POST",
@@ -127,6 +130,10 @@ $(document).bind("pageinit", function( e, data ) {
       }
     });
   });
+
+});
+
+$(document).bind("pageinit", function( e, data ) {
 });
 
 function listFriends(friends) {
@@ -185,26 +192,54 @@ function callJSONP(url) {
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
     }
 
-    // onSuccess Geolocation
-    //
-    function onSuccess(position) {
-        var element = document.getElementById('geolocation');
-        element.innerHTML = 'Latitude: '           + position.coords.latitude              + '<br />' +
-                            'Longitude: '          + position.coords.longitude             + '<br />' +
-                            'Altitude: '           + position.coords.altitude              + '<br />' +
-                            'Accuracy: '           + position.coords.accuracy              + '<br />' +
-                            'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + '<br />' +
-                            'Heading: '            + position.coords.heading               + '<br />' +
-                            'Speed: '              + position.coords.speed                 + '<br />' +
-                            'Timestamp: '          + position.timestamp                    + '<br />';
-    }
+  // onSuccess Geolocation
+  //
+  function watchPositionSuccess(position) {
+    var element = document.getElementById('geolocation');
+    element.innerHTML = 'Latitude: '           + position.coords.latitude              + '<br />' +
+      'Longitude: '          + position.coords.longitude             + '<br />' +
+      'Altitude: '           + position.coords.altitude              + '<br />' +
+      'Accuracy: '           + position.coords.accuracy              + '<br />' +
+      'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + '<br />' +
+      'Heading: '            + position.coords.heading               + '<br />' +
+      'Speed: '              + position.coords.speed                 + '<br />' +
+      'Timestamp: '          + position.timestamp                    + '<br />';
+      
+    $.ajax({
+      type: "POST",
+      url: 'https://whereyouat.net/rest/location.json',
+      dataType: 'json',
+      data: {
+        longitude: position.coords.longitude,
+        latitude: position.coords.latitude,
+        accuracy: position.coords.accuracy,
+        // todo: submit real timestamp updated: Math.round(position.timestamp)
+        updated: 123455
 
-    // onError Callback receives a PositionError object
-    //
-    function onError(error) {
-        alert('code: '    + error.code    + '\n' +
-              'message: ' + error.message + '\n');
-    }
+      },
+      success: function() {
+        //alert('sent location');
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        var statusCode = jqXHR.statusCode().status;
+        /*
+        if (statusCode == 406) {
+          $.mobile.changePage("#login");
+        }
+        else {*/
+          alert('Houston, we have a problem trying to submit location: ' + statusCode + ' ' + errorThrown);
+        //}
+      }
+    });
+      
+  }
+
+// onError Callback receives a PositionError object
+//
+function watchPositionError(error) {
+    alert('code: '    + error.code    + '\n' +
+          'message: ' + error.message + '\n');
+}
 
                             
 function displayPhoneLocation() {
