@@ -204,7 +204,7 @@ function callJSONP(url) {
       'Heading: '            + position.coords.heading               + '<br />' +
       'Speed: '              + position.coords.speed                 + '<br />' +
       'Timestamp: '          + position.timestamp                    + '<br />';
-      
+
     $.ajax({
       type: "POST",
       url: 'https://whereyouat.net/rest/location.json',
@@ -213,9 +213,7 @@ function callJSONP(url) {
         longitude: position.coords.longitude,
         latitude: position.coords.latitude,
         accuracy: position.coords.accuracy,
-        // todo: submit real timestamp updated: Math.round(position.timestamp)
-        updated: 123455
-
+        updated: Math.round(position.timestamp/1000)
       },
       success: function() {
         //alert('sent location');
