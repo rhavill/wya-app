@@ -140,7 +140,7 @@ function listFriends(friends) {
   if (friends.length) {
     $('#friend-list').empty();
     $.each(friends, function(key, value) { 
-      $('<li><a href="' + value.id + '">' + value.name + '</a></li>').appendTo('#friend-list');
+      $('<li><a href="?id=' + value.id + '#friend-phone">' + value.name + '</a></li>').appendTo('#friend-list');
     });
     $("#friend-list").listview("refresh");
   }
