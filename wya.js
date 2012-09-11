@@ -1,3 +1,4 @@
+var baseUrl = 'http://wya';
 
 // Listen for any attempts to call changePage().
 $(document).bind( "pagebeforechange", function( e, data ) { 
@@ -8,7 +9,11 @@ $(document).bind( "pagebeforechange", function( e, data ) {
     }
     else if (u.hash == '#my-phone') {
       //displayPhoneLocation();
-      alert('find phone');
+      //alert('find phone');
+    }
+    if (u.hash.slice(0, 13) == '#friend-phone') {
+      var fid = u.hash.slice(18, u.hash.length);
+      getLocation(fid);
     }
     //e.preventDefault();
   }
@@ -32,7 +37,7 @@ $(document).ready(function () {
     if(u != '' && p != '') {
       $.ajax({
         type: "POST",
-        url: 'https://whereyouat.net/rest/user/login.json',
+        url: baseUrl + '/rest/user/login.json',
         dataType: 'json',
         data: {
           username: u,
@@ -60,7 +65,7 @@ $(document).ready(function () {
     if(resgisterUsername != '' && registerEmail != '') {
       $.ajax({
         type: "POST",
-        url: 'https://whereyouat.net/rest/user/register.json',
+        url: baseUrl + '/rest/user/register.json',
         dataType: 'json',
         data: {
           account: {
@@ -91,7 +96,7 @@ $(document).ready(function () {
     if(name != '') {
       $.ajax({
         type: "POST",
-        url: 'https://whereyouat.net/rest/user-relationships/password.json',
+        url: baseUrl + '/rest/user-relationships/password.json',
         dataType: 'json',
         data: {
           name: name
@@ -114,7 +119,7 @@ $(document).ready(function () {
   $('.logout').click(function() {
     $.ajax({
       type: "POST",
-      url: 'https://whereyouat.net/rest/user/logout.json',
+      url: baseUrl + '/rest/user/logout.json',
       dataType: 'json',
       success: function() {
         $.mobile.changePage("#login");
@@ -134,13 +139,14 @@ $(document).ready(function () {
 });
 
 $(document).bind("pageinit", function( e, data ) {
+  var u = $.mobile.path.parseUrl(data.toPage);
 });
 
 function listFriends(friends) {
   if (friends.length) {
     $('#friend-list').empty();
     $.each(friends, function(key, value) { 
-      $('<li><a href="?id=' + value.id + '#friend-phone">' + value.name + '</a></li>').appendTo('#friend-list');
+      $('<li><a href="#friend-phone?fid=' + value.id + '">' + value.name + '</a></li>').appendTo('#friend-list');
     });
     $("#friend-list").listview("refresh");
   }
@@ -149,7 +155,7 @@ function listFriends(friends) {
 function loadFriends() {
   $.ajax({
     type: "GET",
-    url: 'https://whereyouat.net/rest/user-relationships.json',
+    url: baseUrl + '/rest/user-relationships.json',
     dataType: 'json',
     success: function(friends) {
       listFriends(friends);
@@ -162,6 +168,27 @@ function loadFriends() {
       else {
         alert('Houston, we have a problem trying to list friends: ' + statusCode + ' ' + errorThrown);        
       }
+    }
+  });
+  
+}
+
+function getLocation(uid) {
+  $.ajax({
+    type: "GET",
+    url: baseUrl + '/rest/location/' + uid + '.json',
+    dataType: 'json',
+    success: function(location) {
+    var element = document.getElementById('friend-geolocation');
+    element.innerHTML = 'Latitude: '           + location.latitude              + '<br />' +
+      'Longitude: '          + location.longitude             + '<br />' +
+      'Altitude: '           + location.latitude              + '<br />' +
+      'Accuracy: '           + location.accuracy              + '<br />' +
+      'Timestamp: '          + location.updated                    + '<br />';
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      var statusCode = jqXHR.statusCode().status;
+      alert('Houston, we have a problem trying to get location for ' + uid + ': ' + statusCode + ' ' + errorThrown);        
     }
   });
   
@@ -188,10 +215,11 @@ function callJSONP(url) {
 
     // Cordova is ready
     //
+    /*
     function onDeviceReady() {
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
     }
-
+    */
   // onSuccess Geolocation
   //
   function watchPositionSuccess(position) {
@@ -207,7 +235,7 @@ function callJSONP(url) {
 
     $.ajax({
       type: "POST",
-      url: 'https://whereyouat.net/rest/location.json',
+      url: baseUrl + '/rest/location.json',
       dataType: 'json',
       data: {
         longitude: position.coords.longitude,
