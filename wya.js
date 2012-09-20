@@ -179,12 +179,21 @@ function getLocation(uid, elementId) {
     url: baseUrl + '/rest/location/' + uid + '.json',
     dataType: 'json',
     success: function(location) {
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var date = new Date(location.updated * 1000);
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    minutes = (minutes > 9) ? minutes : '0' + minutes;
+    var seconds = date.getSeconds();
+    seconds = (seconds > 9) ? seconds : '0' + seconds;
+    var month = date.getMonth();
+    var day = date.getDate() + ',';
+    var time = months[month] + ' ' + day + ' ' + hours + ':' + minutes + ':' + seconds;
       var element = document.getElementById('friend-geolocation');
-      element.innerHTML = 'Latitude: '           + location.latitude              + '<br />' +
-        'Longitude: '          + location.longitude             + '<br />' +
-        'Altitude: '           + location.latitude              + '<br />' +
-        'Accuracy: '           + location.accuracy              + '<br />' +
-        'Timestamp: '          + location.updated                    + '<br />';
+      element.innerHTML = '<b>Latitude</b>: ' + location.latitude +
+        ' <b>Longitude:</b> ' + location.longitude + '<br />' +
+        '<b>Accuracy:</b> ' + location.accuracy + 'm' +
+        ' <b>Time:</b> ' + time + '<br />';
       drawGmap(elementId, location.latitude, location.longitude);
       
     },
@@ -225,15 +234,21 @@ function callJSONP(url) {
   // onSuccess Geolocation
   //
   function watchPositionSuccess(position) {
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var date = new Date(position.timestamp);
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    minutes = (minutes > 9) ? minutes : '0' + minutes;
+    var seconds = date.getSeconds();
+    seconds = (seconds > 9) ? seconds : '0' + seconds;
+    var month = date.getMonth();
+    var day = date.getDate() + ',';
+    var time = months[month] + ' ' + day + ' ' + hours + ':' + minutes + ':' + seconds;
     var element = document.getElementById('geolocation');
-    element.innerHTML = 'Latitude: '           + position.coords.latitude              + '<br />' +
-      'Longitude: '          + position.coords.longitude             + '<br />' +
-      'Altitude: '           + position.coords.altitude              + '<br />' +
-      'Accuracy: '           + position.coords.accuracy              + '<br />' +
-      'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + '<br />' +
-      'Heading: '            + position.coords.heading               + '<br />' +
-      'Speed: '              + position.coords.speed                 + '<br />' +
-      'Timestamp: '          + position.timestamp                    + '<br />';
+    element.innerHTML = '<b>Latitude</b>: ' + position.coords.latitude +
+      ' <b>Longitude:</b> ' + position.coords.longitude + '<br />' +
+      '<b>Accuracy:</b> ' + position.coords.accuracy + 'm' +
+      ' <b>Time:</b> ' + time + '<br />';
 
     $.ajax({
       type: "POST",
