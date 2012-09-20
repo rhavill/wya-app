@@ -1,4 +1,5 @@
-var baseUrl = 'http://wya';
+//var baseUrl = 'http://wya';
+var baseUrl = 'https://whereyouat.net';
 
 // Listen for any attempts to call changePage().
 $(document).bind( "pagebeforechange", function( e, data ) { 
@@ -190,9 +191,9 @@ function getLocation(uid, elementId) {
     var day = date.getDate() + ',';
     var time = months[month] + ' ' + day + ' ' + hours + ':' + minutes + ':' + seconds;
       var element = document.getElementById('friend-geolocation');
-      element.innerHTML = '<b>Latitude</b>: ' + location.latitude +
+      element.innerHTML = '<b>Latitude</b>: ' + location.latitude + '<br />' +
         ' <b>Longitude:</b> ' + location.longitude + '<br />' +
-        '<b>Accuracy:</b> ' + location.accuracy + 'm' +
+        '<b>Accuracy:</b> ' + location.accuracy + 'm' + '<br />' +
         ' <b>Time:</b> ' + time + '<br />';
       drawGmap(elementId, location.latitude, location.longitude);
       
@@ -245,9 +246,9 @@ function callJSONP(url) {
     var day = date.getDate() + ',';
     var time = months[month] + ' ' + day + ' ' + hours + ':' + minutes + ':' + seconds;
     var element = document.getElementById('geolocation');
-    element.innerHTML = '<b>Latitude</b>: ' + position.coords.latitude +
+    element.innerHTML = '<b>Latitude</b>: ' + position.coords.latitude + '<br />' +
       ' <b>Longitude:</b> ' + position.coords.longitude + '<br />' +
-      '<b>Accuracy:</b> ' + position.coords.accuracy + 'm' +
+      '<b>Accuracy:</b> ' + position.coords.accuracy + 'm' + '<br />' +
       ' <b>Time:</b> ' + time + '<br />';
 
     $.ajax({
@@ -284,11 +285,6 @@ function watchPositionError(error) {
           'message: ' + error.message + '\n');
 }
 
-                            
-function displayPhoneLocation() {
-  
-}
-
 function drawGmap(elementId, latitude, longitude)  {
     
     var latlng = new google.maps.LatLng(latitude, longitude);
@@ -298,8 +294,7 @@ function drawGmap(elementId, latitude, longitude)  {
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     var element = document.getElementById(elementId);
-    var map = new google.maps.Map(element,
-        myOptions);
+    var map = new google.maps.Map(element, myOptions);
     var marker = new google.maps.Marker({
           position: latlng,
           map: map
