@@ -13,7 +13,7 @@ $(document).bind( "pagebeforechange", function( e, data ) {
     }
     if (u.hash.slice(0, 13) == '#friend-phone') {
       var fid = u.hash.slice(18, u.hash.length);
-      getLocation(fid);
+      getLocation(fid, 'friend-phone-map-canvas');
     }
     //e.preventDefault();
   }
@@ -173,18 +173,20 @@ function loadFriends() {
   
 }
 
-function getLocation(uid) {
+function getLocation(uid, elementId) {
   $.ajax({
     type: "GET",
     url: baseUrl + '/rest/location/' + uid + '.json',
     dataType: 'json',
     success: function(location) {
-    var element = document.getElementById('friend-geolocation');
-    element.innerHTML = 'Latitude: '           + location.latitude              + '<br />' +
-      'Longitude: '          + location.longitude             + '<br />' +
-      'Altitude: '           + location.latitude              + '<br />' +
-      'Accuracy: '           + location.accuracy              + '<br />' +
-      'Timestamp: '          + location.updated                    + '<br />';
+      var element = document.getElementById('friend-geolocation');
+      element.innerHTML = 'Latitude: '           + location.latitude              + '<br />' +
+        'Longitude: '          + location.longitude             + '<br />' +
+        'Altitude: '           + location.latitude              + '<br />' +
+        'Accuracy: '           + location.accuracy              + '<br />' +
+        'Timestamp: '          + location.updated                    + '<br />';
+      drawGmap(elementId, location.latitude, location.longitude);
+      
     },
     error: function(jqXHR, textStatus, errorThrown) {
       var statusCode = jqXHR.statusCode().status;
@@ -244,7 +246,7 @@ function callJSONP(url) {
         updated: Math.round(position.timestamp/1000)
       },
       success: function() {
-        //alert('sent location');
+        drawGmap('my-phone-map-canvas', position.coords.latitude, position.coords.longitude);
       },
       error: function(jqXHR, textStatus, errorThrown) {
         var statusCode = jqXHR.statusCode().status;
@@ -271,3 +273,23 @@ function watchPositionError(error) {
 function displayPhoneLocation() {
   
 }
+
+function drawGmap(elementId, latitude, longitude)  {
+    
+    var latlng = new google.maps.LatLng(latitude, longitude);
+    var myOptions = {
+      zoom: 16,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var element = document.getElementById(elementId);
+    var map = new google.maps.Map(element,
+        myOptions);
+    var marker = new google.maps.Marker({
+          position: latlng,
+          map: map
+          //title:""
+    });
+  }
+  //google.maps.event.addDomListener(window,'load', drawGmap);
+ 
