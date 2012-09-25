@@ -50,7 +50,7 @@ $(document).ready(function () {
         },
         error: function(jqXHR, textStatus, errorThrown) {
           var statusCode = jqXHR.statusCode().status;
-          alert('Houston, we have a problem trying to log in: ' + statusCode + ' ' + errorThrown);
+          alert('Problem trying to log in: ' + statusCode + ' ' + errorThrown);
           $("#loginSubmitButton").removeAttr("disabled");
         }
       });
@@ -82,7 +82,7 @@ $(document).ready(function () {
         error: function(jqXHR, textStatus, errorThrown) {
           var statusCode = jqXHR.statusCode().status;
           $("#registerSubmit").removeAttr("disabled");
-          alert('Houston, we have a problem trying to register: ' + statusCode + ' ' + stripTags(errorThrown));
+          alert('Problem trying to register: ' + statusCode + ' ' + stripTags(errorThrown));
         }
       });
     }
@@ -110,7 +110,7 @@ $(document).ready(function () {
         error: function(jqXHR, textStatus, errorThrown) {
           var statusCode = jqXHR.statusCode().status;
           $("#registerSubmit").removeAttr("disabled");
-          alert('Houston, we have a problem with the password request: ' + statusCode + ' ' + stripTags(errorThrown));
+          alert('Problem with the password request: ' + statusCode + ' ' + stripTags(errorThrown));
         }
       });
     }
@@ -137,7 +137,7 @@ $(document).ready(function () {
         error: function(jqXHR, textStatus, errorThrown) {
           var statusCode = jqXHR.statusCode().status;
           $("#findFriendSubmit").removeAttr("disabled");
-          alert('Houston, we have a problem making friend request: ' + statusCode + ' ' + stripTags(errorThrown));
+          alert('Problem making friend request: ' + statusCode + ' ' + stripTags(errorThrown));
         }
       });
     }
@@ -158,7 +158,7 @@ $(document).ready(function () {
           $.mobile.changePage("#login");
         }
         else {
-          alert('Houston, we have a problem trying to log out: ' + statusCode + ' ' + errorThrown);
+          alert('Problem trying to log out: ' + statusCode + ' ' + errorThrown);
         }
       }
     });
@@ -194,7 +194,7 @@ function loadFriends() {
         $.mobile.changePage("#login");
       }
       else {
-        alert('Houston, we have a problem trying to list friends: ' + statusCode + ' ' + errorThrown);        
+        alert('Problem trying to list friends: ' + statusCode + ' ' + errorThrown);        
       }
     }
   });
@@ -227,7 +227,7 @@ function getLocation(uid, elementId) {
     },
     error: function(jqXHR, textStatus, errorThrown) {
       var statusCode = jqXHR.statusCode().status;
-      alert('Houston, we have a problem trying to get location for ' + uid + ': ' + statusCode + ' ' + errorThrown);        
+      alert('Problem trying to get location for ' + uid + ': ' + statusCode + ' ' + errorThrown);        
     }
   });
   
@@ -298,7 +298,7 @@ function callJSONP(url) {
           $.mobile.changePage("#login");
         }
         else {*/
-          alert('Houston, we have a problem trying to submit location: ' + statusCode + ' ' + errorThrown);
+          alert('Problem trying to submit location: ' + statusCode + ' ' + errorThrown);
         //}
       }
     });
