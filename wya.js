@@ -1,5 +1,5 @@
-//var baseUrl = 'http://wya';
-var baseUrl = 'https://whereyouat.net';
+var baseUrl = 'http://wya';
+//var baseUrl = 'https://whereyouat.net';
 
 // Listen for any attempts to call changePage().
 $(document).bind( "pagebeforechange", function( e, data ) { 
@@ -111,6 +111,33 @@ $(document).ready(function () {
           var statusCode = jqXHR.statusCode().status;
           $("#registerSubmit").removeAttr("disabled");
           alert('Houston, we have a problem with the password request: ' + statusCode + ' ' + stripTags(errorThrown));
+        }
+      });
+    }
+    return false;
+  });
+  
+  $('#findFriendForm').on("submit",function(e) {
+    //disable the button so we can't resubmit while we wait
+    $("#findFriendSubmit",this).attr("disabled","disabled");
+    var name = $("#friendName", this).val();
+    if(name != '') {
+      $.ajax({
+        type: "POST",
+        url: baseUrl + '/rest/user-relationships/request-by-name-email.json',
+        dataType: 'json',
+        data: {
+          name: name
+        },
+        success: function() {
+          $("#findFriendSubmit").removeAttr("disabled");
+          alert('The friendship request has been submittted.');
+          //$.mobile.changePage("#login");
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          var statusCode = jqXHR.statusCode().status;
+          $("#findFriendSubmit").removeAttr("disabled");
+          alert('Houston, we have a problem making friend request: ' + statusCode + ' ' + stripTags(errorThrown));
         }
       });
     }
