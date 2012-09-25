@@ -8,6 +8,9 @@ $(document).bind( "pagebeforechange", function( e, data ) {
     if (u.hash == '#my-friends') {
       loadFriends();
     }
+    else if (u.hash == '#friend-requests') {
+      loadFriendRequests();
+    }
     else if (u.hash == '#my-phone') {
       //displayPhoneLocation();
       //alert('find phone');
@@ -30,6 +33,10 @@ $(document).ready(function () {
   if (location.hash == '' || location.hash == '#my-friends') {
     loadFriends();
   }
+  // is this needed in document.ready?
+  //else if (location.hash == '#friend-requests') {
+  //  loadFriendRequests();
+  //}
   $("#loginForm").on("submit",function(e) {
     //disable the button so we can't resubmit while we wait
     $("#loginSubmitButton",this).attr("disabled","disabled");
@@ -180,6 +187,25 @@ function listFriends(friends) {
   }
 }
 
+function listFriendRequests(friendRequests) {
+  if (friendRequests.length) {
+    $('#received-requests').empty();
+    $('#sent-requests').empty();
+    $.each(friendRequests, function(key, value) {
+      if (value.requestee_id) {
+        //$('<li><a href="#friend-phone?rid=' + value.rid + '">' + value.name + '</a></li>').appendTo('#sent-requests');
+        $('<li><a href="#my-friends">' + value.name + '</a></li>').appendTo('#sent-requests');
+      }
+      else if (value.requester_id) {
+        //$('<li><a href="#friend-phone?rid=' + value.rid + '">' + value.name + '</a></li>').appendTo('#received-requests');
+        $('<li><a href="#my-friends">' + value.name + '</a></li>').appendTo('#received-requests');
+      }
+    });
+    $("#received-requests").listview("refresh");
+    $("#sent-requests").listview("refresh");
+  }
+}
+
 function loadFriends() {
   $.ajax({
     type: "GET",
@@ -194,11 +220,25 @@ function loadFriends() {
         $.mobile.changePage("#login");
       }
       else {
-        alert('Problem trying to list friends: ' + statusCode + ' ' + errorThrown);        
+        alert('Problem trying to load friends: ' + statusCode + ' ' + errorThrown);        
       }
     }
-  });
-  
+  });  
+}
+
+function loadFriendRequests() {
+  $.ajax({
+    type: "POST",
+    url: baseUrl + '/rest/user-relationships/friend-requests.json',
+    dataType: 'json',
+    success: function(friendRequests) {
+      listFriendRequests(friendRequests);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      var statusCode = jqXHR.statusCode().status;
+      alert('Problem trying to load friend requests: ' + statusCode + ' ' + errorThrown);        
+    }
+  });  
 }
 
 function getLocation(uid, elementId) {

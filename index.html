@@ -19,6 +19,7 @@
       <div data-role="navbar">
         <ul>
           <li><a href="#my-phone" class="my-phone">My Phone</a></li>
+          <li><a href="#friend-requests" class="friend-requests">Friend Requests</a></li>
           <li><a href="#logout" class="logout">Logout</a></li>
         </ul>
       </div><!-- /navbar -->
@@ -44,6 +45,32 @@
   </div><!-- /page -->
   
   
+  <!-- Start of Friend Requests page -->
+  <div data-role="page" id="friend-requests">
+    <div data-role="header">
+      <h1>Friend Requests</h1>
+      <div data-role="navbar">
+        <ul>
+          <li><a href="#my-phone" class="my-phone">My Phone</a></li>
+          <li><a href="#my-friends" class="my-friends">My Friends</a></li>
+          <li><a href="#logout" class="logout">Logout</a></li>
+        </ul>
+      </div><!-- /navbar -->
+    </div><!-- /header -->
+
+    <div class="content" data-role="content">
+      <h2>Received Requests</h2>
+      <ul id="received-requests" data-role="listview"></ul>
+      <h2>Sent Requests</h2>
+      <ul id="sent-requests" data-role="listview"></ul>
+    </div><!-- /content -->
+
+    <!--div data-role="footer">
+      <h4>Page Footer</h4>
+    </div--><!-- /footer -->
+  </div><!-- /page -->
+
+
   <!-- Start of My Phone page -->
   <div data-role="page" id="my-phone">
     <div data-role="header">
@@ -51,6 +78,7 @@
       <div data-role="navbar">
         <ul>
           <li><a href="#my-friends" class="my-friends">My Friends</a></li>
+          <li><a href="#friend-requests" class="friend-requests">Friend Requests</a></li>
           <li><a href="#logout" class="logout">Logout</a></li>
         </ul>
       </div><!-- /navbar -->
@@ -74,6 +102,7 @@
         <ul>
           <li><a href="#my-friends" class="my-friends">My Friends</a></li>
           <li><a href="#my-phone" class="my-friends">My Phone</a></li>
+          <li><a href="#friend-requests" class="friend-requests">Friend Requests</a></li>
           <li><a href="#logout" class="logout">Logout</a></li>
         </ul>
       </div><!-- /navbar -->
