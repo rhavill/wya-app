@@ -33,10 +33,6 @@ $(document).ready(function () {
   if (location.hash == '' || location.hash == '#my-friends') {
     loadFriends();
   }
-  // is this needed in document.ready?
-  //else if (location.hash == '#friend-requests') {
-  //  loadFriendRequests();
-  //}
   $("#loginForm").on("submit",function(e) {
     //disable the button so we can't resubmit while we wait
     $("#loginSubmitButton",this).attr("disabled","disabled");
@@ -191,18 +187,22 @@ function listFriendRequests(friendRequests) {
   if (friendRequests.length) {
     $('#received-requests').empty();
     $('#sent-requests').empty();
+    $('<table>').appendTo('#sent-requests');
+    $('<table>').appendTo('#received-requests');
     $.each(friendRequests, function(key, value) {
       if (value.requestee_id) {
-        //$('<li><a href="#friend-phone?rid=' + value.rid + '">' + value.name + '</a></li>').appendTo('#sent-requests');
-        $('<li><a href="#my-friends">' + value.name + '</a></li>').appendTo('#sent-requests');
+        //$('<li>' + value.name + ' <a href="#my-friends">deny</a></li>').appendTo('#sent-requests');
+        $('<tr><td>' + value.name + '</td><td><a href="#cancel-request?rid=' + value.rid + '">Cancel</a></td></tr>').appendTo('#sent-requests');
       }
       else if (value.requester_id) {
-        //$('<li><a href="#friend-phone?rid=' + value.rid + '">' + value.name + '</a></li>').appendTo('#received-requests');
-        $('<li><a href="#my-friends">' + value.name + '</a></li>').appendTo('#received-requests');
+        //$('<li><a href="#my-friends">' + value.name + '</a></li>').appendTo('#received-requests');
+        $('<tr><td>' + value.name + '</td><td><a href="#accept-request?rid=' + value.rid + '">Accept</a></td><td><a href="#cancel-request?rid=' + value.rid + '">Deny</a></td></tr>').appendTo('#received-requests');
       }
     });
-    $("#received-requests").listview("refresh");
-    $("#sent-requests").listview("refresh");
+    $('</table>').appendTo('#sent-requests');
+    $('</table>').appendTo('#received-requests');
+    //$("#received-requests").listview("refresh");
+    //$("#sent-requests").listview("refresh");
   }
 }
 
