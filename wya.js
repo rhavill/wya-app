@@ -147,7 +147,7 @@ $(document).ready(function () {
     return false;
   });
 
-  $('.logout').click(function() {
+  $('#logout-button').click(function() {
     $.ajax({
       type: "POST",
       url: baseUrl + '/rest/user/logout.json',
@@ -192,17 +192,37 @@ function listFriendRequests(friendRequests) {
     $.each(friendRequests, function(key, value) {
       if (value.requestee_id) {
         //$('<li>' + value.name + ' <a href="#my-friends">deny</a></li>').appendTo('#sent-requests');
-        $('<tr><td>' + value.name + '</td><td><a href="#cancel-request?rid=' + value.rid + '">Cancel</a></td></tr>').appendTo('#sent-requests');
+        $('<tr><td>' + value.name + '</td><td><a class="cancel-request" href="#cancel-request?rid=' + value.rid + '">Cancel</a></td></tr>').appendTo('#sent-requests');
       }
       else if (value.requester_id) {
         //$('<li><a href="#my-friends">' + value.name + '</a></li>').appendTo('#received-requests');
-        $('<tr><td>' + value.name + '</td><td><a href="#accept-request?rid=' + value.rid + '">Accept</a></td><td><a href="#cancel-request?rid=' + value.rid + '">Deny</a></td></tr>').appendTo('#received-requests');
+        $('<tr><td>' + value.name + '</td><td><a class="accept-request" href="#accept-request?rid=' + value.rid + '">Accept</a></td><td><a class="cancel-request" href="#cancel-request?rid=' + value.rid + '">Deny</a></td></tr>').appendTo('#received-requests');
       }
     });
     $('</table>').appendTo('#sent-requests');
     $('</table>').appendTo('#received-requests');
     //$("#received-requests").listview("refresh");
     //$("#sent-requests").listview("refresh");
+    $('.cancel-request').click(function() {
+      var rid = this.hash.split('=')[1];
+      $.ajax({
+        type: "DELETE",
+        url: baseUrl + '/rest/user-relationships/' + rid + '.json',
+        dataType: 'json',
+        success: function(rid, textStatus, jqXHR) {
+          if (rid) {
+            refreshPage($("#friend-requests"));
+          }
+          else {
+            alert('Problem finding friend request to delete.');
+          }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          var statusCode = jqXHR.statusCode().status;
+          alert('Problem trying to cancel friend request: ' + statusCode + ' ' + errorThrown);
+        }
+      });
+    });
   }
 }
 
@@ -370,3 +390,8 @@ function drawGmap(elementId, latitude, longitude)  {
   }
   //google.maps.event.addDomListener(window,'load', drawGmap);
  
+ function refreshPage(page){
+    // Page refresh
+    page.trigger('pagecreate');
+    //page.listview('refresh');
+}
