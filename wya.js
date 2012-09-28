@@ -184,12 +184,13 @@ function listFriends(friends) {
 }
 
 function listFriendRequests(friendRequests) {
+  var rid;
+  $('#received-requests').empty();
+  $('#sent-requests').empty();
   if (friendRequests.length) {
-    $('#received-requests').empty();
-    $('#sent-requests').empty();
     $('<table>').appendTo('#sent-requests');
     $('<table>').appendTo('#received-requests');
-    $.each(friendRequests, function(key, value) {
+    $.each(friendRequests, function(index, value) {
       if (value.requestee_id) {
         //$('<li>' + value.name + ' <a href="#my-friends">deny</a></li>').appendTo('#sent-requests');
         $('<tr><td>' + value.name + '</td><td><a class="cancel-request" href="#cancel-request?rid=' + value.rid + '">Cancel</a></td></tr>').appendTo('#sent-requests');
@@ -204,18 +205,22 @@ function listFriendRequests(friendRequests) {
     //$("#received-requests").listview("refresh");
     //$("#sent-requests").listview("refresh");
     $('.cancel-request').click(function() {
-      var rid = this.hash.split('=')[1];
+      rid = this.hash.split('=')[1];
       $.ajax({
         type: "DELETE",
         url: baseUrl + '/rest/user-relationships/' + rid + '.json',
         dataType: 'json',
         success: function(rid, textStatus, jqXHR) {
-          if (rid) {
-            refreshPage($("#friend-requests"));
-          }
-          else {
+          if (!rid) {
             alert('Problem finding friend request to delete.');
           }
+          $.each(friendRequests, function(index, val) {
+            if (val.rid == rid) {
+              friendRequests.splice(index,1);
+              return false;
+            }
+          });
+          listFriendRequests(friendRequests);
         },
         error: function(jqXHR, textStatus, errorThrown) {
           var statusCode = jqXHR.statusCode().status;
