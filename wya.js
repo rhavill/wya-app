@@ -228,6 +228,30 @@ function listFriendRequests(friendRequests) {
         }
       });
     });
+    $('.accept-request').click(function() {
+      rid = this.hash.split('=')[1];
+      $.ajax({
+        type: "PUT",
+        url: baseUrl + '/rest/user-relationships/' + rid + '.json',
+        dataType: 'json',
+        success: function(rid, textStatus, jqXHR) {
+          if (!rid) {
+            alert('Problem finding friend request to accept.');
+          }
+          $.each(friendRequests, function(index, val) {
+            if (val.rid == rid) {
+              friendRequests.splice(index,1);
+              return false;
+            }
+          });
+          listFriendRequests(friendRequests);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          var statusCode = jqXHR.statusCode().status;
+          alert('Problem trying to accept friend request: ' + statusCode + ' ' + errorThrown);
+        }
+      });
+    });
   }
 }
 
