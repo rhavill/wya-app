@@ -17,6 +17,9 @@ $(document).bind( "pagebeforechange", function( e, data ) {
     }
     if (u.hash.slice(0, 13) == '#friend-phone') {
       var fid = u.hash.slice(18, u.hash.length);
+      $('#unfriendUid').attr('value', fid);
+      $('#text').attr('value', 'fid:' + fid);
+      var v = $('#unfriendUid');
       getLocation(fid, 'friend-phone-map-canvas');
     }
     //e.preventDefault();
@@ -141,6 +144,33 @@ $(document).ready(function () {
           var statusCode = jqXHR.statusCode().status;
           $("#findFriendSubmit").removeAttr("disabled");
           alert('Problem making friend request: ' + statusCode + ' ' + stripTags(errorThrown));
+        }
+      });
+    }
+    return false;
+  });
+
+  $('#unfriendForm').on("submit",function(e) {
+    //disable the button so we can't resubmit while we wait
+    $("#unfriendSubmit",this).attr("disabled","disabled");
+    var uid = $("#unfriendUid", this).val();
+    if(uid) {
+      $.ajax({
+        type: "POST",
+        url: baseUrl + '/rest/user-relationships/delete-by-uid.json',
+        dataType: 'json',
+        data: {
+          uid: uid
+        },
+        success: function() {
+          $("#unfriendSubmit").removeAttr("disabled");
+          alert('Unfriended.');
+          $.mobile.changePage("#my-friends");
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          var statusCode = jqXHR.statusCode().status;
+          $("#unfriendSubmit").removeAttr("disabled");
+          alert('Problem making unfriend request: ' + statusCode + ' ' + stripTags(errorThrown));
         }
       });
     }

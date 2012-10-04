@@ -101,8 +101,8 @@
       <h1>Friend</h1>
       <div data-role="navbar">
         <ul>
-          <li><a href="#my-friends" class="my-friends">My Friends</a></li>
           <li><a href="#my-phone" class="my-friends">My Phone</a></li>
+          <li><a href="#my-friends" class="my-friends">My Friends</a></li>
           <li><a href="#friend-requests" class="friend-requests">Friend Requests</a></li>
           <li><a href="#logout" id="logout-button">Logout</a></li>
         </ul>
@@ -112,6 +112,13 @@
     <div class="content" data-role="content">
       <p id="friend-geolocation">Finding friend location...</p>
       <div id="friend-phone-map-canvas" style="width:305px; height:310px;"></div>
+      <div id="unfriend">
+        <form id="unfriendForm"  method="post" action="#friend-phone">
+          <input type="hidden" name="uid" id="unfriendUid" value="">
+          <input type="text" name="text" id="text" value="">
+          <input type="submit" value="Unfriend" id="unfriendSubmitButton">
+        </form>
+      </div>
     </div><!-- /content -->
 
     <!--div data-role="footer">
