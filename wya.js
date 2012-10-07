@@ -12,14 +12,9 @@ $(document).bind( "pagebeforechange", function( e, data ) {
     else if (u.hash == '#friend-requests') {
       loadFriendRequests();
     }
-    else if (u.hash == '#my-phone') {
-      //displayPhoneLocation();
-      //alert('find phone');
-    }
     if (u.hash.slice(0, 13) == '#friend-phone') {
       var fid = u.hash.slice(18, u.hash.length);
       $('#unfriendUid').attr('value', fid);
-      $('#text').attr('value', 'fid:' + fid);
       var v = $('#unfriendUid');
       getLocation(fid, 'friend-phone-map-canvas');
     }
