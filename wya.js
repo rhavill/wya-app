@@ -1,5 +1,6 @@
-var baseUrl = 'http://wya';
-//var baseUrl = 'https://whereyouat.net';
+//var baseUrl = 'http://wya';
+var baseUrl = 'https://whereyouat.net';
+var submitLocation = true;
 
 // Listen for any attempts to call changePage().
 $(document).bind( "pagebeforechange", function( e, data ) { 
@@ -51,6 +52,7 @@ $(document).ready(function () {
           password: p
         },
         success: function() {
+          submitLocation = true;
           $("#loginSubmitButton").removeAttr("disabled");
           $.mobile.changePage("#my-friends");
         },
@@ -367,20 +369,21 @@ function callJSONP(url) {
   }
 }
 
- // Wait for Cordova to load
-    //
-    //document.addEventListener("deviceready", onDeviceReady, false);
+// Wait for Cordova to load
+   //
+   //document.addEventListener("deviceready", onDeviceReady, false);
 
-    // Cordova is ready
-    //
-    /*
-    function onDeviceReady() {
-        navigator.geolocation.getCurrentPosition(onSuccess, onError);
-    }
-    */
-  // onSuccess Geolocation
-  //
-  function watchPositionSuccess(position) {
+   // Cordova is ready
+   //
+   /*
+   function onDeviceReady() {
+       navigator.geolocation.getCurrentPosition(onSuccess, onError);
+   }
+   */
+ // onSuccess Geolocation
+ //
+ function watchPositionSuccess(position) {
+  if (submitLocation) {
     var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     var date = new Date(position.timestamp);
     var hours = date.getHours();
@@ -412,17 +415,16 @@ function callJSONP(url) {
       },
       error: function(jqXHR, textStatus, errorThrown) {
         var statusCode = jqXHR.statusCode().status;
-        /*
-        if (statusCode == 406) {
-          $.mobile.changePage("#login");
+        if (statusCode == 401) {
+          submitLocation = false;
         }
-        else {*/
+        else {
           alert('Problem trying to submit location: ' + statusCode + ' ' + errorThrown);
-        //}
+        }
       }
     });
-      
   }
+}
 
 // onError Callback receives a PositionError object
 //
