@@ -137,9 +137,14 @@ $(document).ready(function () {
         data: {
           name: name
         },
-        success: function() {
+        success: function(rid, textStatus, jqXHR) {
           $("#findFriendSubmit").removeAttr("disabled");
-          alert('The friendship request has been submittted.');
+          if (rid) {
+            alert('The friendship request has been submittted.');
+          }
+          else {
+            alert('Could not find someone with that code name or email.');
+          }
           //$.mobile.changePage("#login");
         },
         error: function(jqXHR, textStatus, errorThrown) {
