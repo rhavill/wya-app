@@ -1,6 +1,7 @@
 //var baseUrl = 'http://wya';
 var baseUrl = 'https://whereyouat.net';
 var submitLocation = true;
+var debugCancel = true;
 
 // Listen for any attempts to call changePage().
 $(document).bind( "pagebeforechange", function( e, data ) { 
@@ -238,6 +239,8 @@ function listFriendRequests(friendRequests) {
     //$("#sent-requests").listview("refresh");
     $('.cancel-request').click(function() {
       rid = this.hash.split('=')[1];
+      if (debugCancel)
+        alert('about to submit cancel request to: ' + baseUrl + '/rest/user-relationships/' + rid + '.json');
       $.ajax({
         type: "DELETE",
         url: baseUrl + '/rest/user-relationships/' + rid + '.json',
@@ -262,6 +265,8 @@ function listFriendRequests(friendRequests) {
     });
     $('.accept-request').click(function() {
       rid = this.hash.split('=')[1];
+      if (debugCancel)
+        alert('about to submit accept request to: ' + baseUrl + '/rest/user-relationships/' + rid + '.json');
       $.ajax({
         type: "PUT",
         url: baseUrl + '/rest/user-relationships/' + rid + '.json',
