@@ -1,9 +1,12 @@
-//var baseUrl = 'http://wya';
-var baseUrl = 'https://whereyouat.net';
+var baseUrl = 'http://wya';
+//var baseUrl = 'https://whereyouat.net';
 var submitLocation = true;
 
 // Listen for any attempts to call changePage().
 $(document).bind( "pagebeforechange", function( e, data ) { 
+  $.mobile.pageData = (data && data.options && data.options.pageData)
+    ? data.options.pageData
+    : null;
   if (typeof data.toPage === "string") {
     var u = $.mobile.path.parseUrl(data.toPage);
     if (u.hash == '#my-friends') {
@@ -13,7 +16,8 @@ $(document).bind( "pagebeforechange", function( e, data ) {
       loadFriendRequests();
     }
     if (u.hash.slice(0, 13) == '#friend-phone') {
-      var fid = u.hash.slice(18, u.hash.length);
+      //var fid = u.hash.slice(18, u.hash.length);
+      var fid = $.mobile.pageData.fid;
       $('#unfriendUid').attr('value', fid);
       var v = $('#unfriendUid');
       getLocation(fid, 'friend-phone-map-canvas');
@@ -21,6 +25,7 @@ $(document).bind( "pagebeforechange", function( e, data ) {
     //e.preventDefault();
   }
 });
+
 
 $(document).ready(function () {
   //navigator.geolocation.getCurrentPosition(onSuccess, onError);
@@ -210,6 +215,7 @@ function listFriends(friends) {
     $('#friend-list').empty();
     $.each(friends, function(key, value) { 
       $('<li><a href="#friend-phone?fid=' + value.id + '">' + value.name + '</a></li>').appendTo('#friend-list');
+      //$('<li><a href="#friend-phone">' + value.name + '</a></li>').appendTo('#friend-list');
     });
     $("#friend-list").listview("refresh");
   }
@@ -224,23 +230,21 @@ function listFriendRequests(friendRequests) {
     $('<table>').appendTo('#received-requests');
     $.each(friendRequests, function(index, value) {
       if (value.requestee_id) {
-        //$('<li>' + value.name + ' <a href="#my-friends">deny</a></li>').appendTo('#sent-requests');
-        $('<tr><td>' + value.name + '</td><td><a class="cancel-request" href="#cancel-request?rid=' + value.rid + '">Cancel</a></td></tr>').appendTo('#sent-requests');
+        $('<tr><td>' + value.name + '</td><td><a class="cancel-request" href="' + baseUrl + '/rest/user-relationships/' + value.rid + '.json' + '">Cancel</a></td></tr>').appendTo('#sent-requests');
       }
       else if (value.requester_id) {
-        //$('<li><a href="#my-friends">' + value.name + '</a></li>').appendTo('#received-requests');
-        $('<tr><td>' + value.name + '</td><td><a class="accept-request" href="#accept-request?rid=' + value.rid + '">Accept</a></td><td><a class="cancel-request" href="#cancel-request?rid=' + value.rid + '">Deny</a></td></tr>').appendTo('#received-requests');
+        $('<tr><td>' + value.name + '</td><td><a class="accept-request" href="' + baseUrl + '/rest/user-relationships/' + value.rid + '.json' + '">Accept</a></td><td><a class="cancel-request" href="' + baseUrl + '/rest/user-relationships/' + value.rid + '.json' + '">Deny</a></td></tr>').appendTo('#received-requests');
       }
     });
     $('</table>').appendTo('#sent-requests');
     $('</table>').appendTo('#received-requests');
     //$("#received-requests").listview("refresh");
     //$("#sent-requests").listview("refresh");
-    $('.cancel-request').click(function() {
-      rid = this.hash.split('=')[1];
+    $('.cancel-request').click(function(e) {
+      e.preventDefault();
       $.ajax({
         type: "DELETE",
-        url: baseUrl + '/rest/user-relationships/' + rid + '.json',
+        url: this.href,
         dataType: 'json',
         success: function(rid, textStatus, jqXHR) {
           if (!rid) {
@@ -260,11 +264,11 @@ function listFriendRequests(friendRequests) {
         }
       });
     });
-    $('.accept-request').click(function() {
-      rid = this.hash.split('=')[1];
+    $('.accept-request').click(function(e) {
+      e.preventDefault();
       $.ajax({
         type: "PUT",
-        url: baseUrl + '/rest/user-relationships/' + rid + '.json',
+        url: this.href,
         dataType: 'json',
         success: function(rid, textStatus, jqXHR) {
           if (!rid) {
