@@ -18,13 +18,14 @@ $(document).bind( "pagebeforechange", function( e, data ) {
     if (u.hash.slice(0, 13) == '#friend-phone') {
       //var fid = u.hash.slice(18, u.hash.length);
       var fid = $.mobile.pageData.fid;
+      var name = $.mobile.pageData.name;
       $('#unfriendUid').attr('value', fid);
       var v = $('#unfriendUid');
       $('#friend-geolocation').children().remove();
       $('#friend-geolocation').text('');
       $('#friend-phone-map-canvas').children().remove();
       $('#friend-phone-map-canvas').css('background-color', '#F6F6F6');
-      getLocation(fid, 'friend-phone-map-canvas');
+      getLocation(fid, name, 'friend-phone-map-canvas');
     }
     //e.preventDefault();
   }
@@ -218,7 +219,7 @@ function listFriends(friends) {
   if (friends.length) {
     $('#friend-list').empty();
     $.each(friends, function(key, value) { 
-      $('<li><a href="#friend-phone?fid=' + value.id + '">' + value.name + '</a></li>').appendTo('#friend-list');
+      $('<li><a href="#friend-phone?fid=' + value.id + '&amp;name=' + value.name + '">' + value.name + '</a></li>').appendTo('#friend-list');
       //$('<li><a href="#friend-phone">' + value.name + '</a></li>').appendTo('#friend-list');
     });
     $("#friend-list").listview("refresh");
@@ -330,7 +331,9 @@ function loadFriendRequests() {
   });  
 }
 
-function getLocation(uid, elementId) {
+function getLocation(uid, name, elementId) {
+  var element = document.getElementById('friend-geolocation');
+  element.innerHTML = '<h2>' + name + '</h2>';
   $.ajax({
     type: "GET",
     url: baseUrl + '/rest/location/' + uid + '.json',
@@ -346,13 +349,13 @@ function getLocation(uid, elementId) {
     var month = date.getMonth();
     var day = date.getDate() + ',';
     var time = months[month] + ' ' + day + ' ' + hours + ':' + minutes + ':' + seconds;
-      var element = document.getElementById('friend-geolocation');
-      element.innerHTML = '<b>Latitude</b>: ' + location.latitude + '<br />' +
-        ' <b>Longitude:</b> ' + location.longitude + '<br />' +
-        '<b>Accuracy:</b> ' + location.accuracy + 'm' + '<br />' +
-        ' <b>Time:</b> ' + time + '<br />';
-      drawGmap(elementId, location.latitude, location.longitude);
       
+    element.innerHTML += '<b>Latitude</b>: ' + location.latitude + '<br />' +
+      ' <b>Longitude:</b> ' + location.longitude + '<br />' +
+      '<b>Accuracy:</b> ' + location.accuracy + 'm' + '<br />' +
+      ' <b>Time:</b> ' + time + '<br />';
+    drawGmap(elementId, location.latitude, location.longitude);
+    
     },
     error: function(jqXHR, textStatus, errorThrown) {
       var statusCode = jqXHR.statusCode().status;
