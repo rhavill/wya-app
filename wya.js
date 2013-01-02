@@ -20,6 +20,10 @@ $(document).bind( "pagebeforechange", function( e, data ) {
       var fid = $.mobile.pageData.fid;
       $('#unfriendUid').attr('value', fid);
       var v = $('#unfriendUid');
+      $('#friend-geolocation').children().remove();
+      $('#friend-geolocation').text('');
+      $('#friend-phone-map-canvas').children().remove();
+      $('#friend-phone-map-canvas').css('background-color', '#F6F6F6');
       getLocation(fid, 'friend-phone-map-canvas');
     }
     //e.preventDefault();
@@ -352,6 +356,7 @@ function getLocation(uid, elementId) {
     },
     error: function(jqXHR, textStatus, errorThrown) {
       var statusCode = jqXHR.statusCode().status;
+      //$.mobile.changePage('#my-friends');
       alert('Problem trying to get location for ' + uid + ': ' + statusCode + ' ' + errorThrown);        
     }
   });
